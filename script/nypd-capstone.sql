@@ -20,12 +20,29 @@ order by 2 desc;
 select typedesc, count(typedesc)
 from calls
 group by 1
-order by 2 desc
+order by 2 desc;
 
 
-/*  */
-select arrestkey, eventid, arrestdate, race, sex, offensedesc, a.latitude, a.longitude
-from arrests as a
-full join calls as c
-on a.arrestkey = c.eventid
-group by 1,2,3,4,5,6,7,8
+/* Concat for geo location */
+select *,concat('POINT','(',latitude, ' ', longitude,')') as location
+from arrests;
+
+with squirrel_info as(
+    select age, primarycolor, activities, groundlocation, running, climbing, threatened, location
+    from squirrels
+    where threatened is true
+    group by 1,2,3,4,5,6,7,8
+    order by 1;
+)
+    
+with arrest_info as(
+    select arrestdate, offensedesc as crime, agegroup, sex, race, concat('POINT','(',latitude, ' ', longitude,')') as location
+    from arrests
+    where 
+    group by
+    order by ;
+)
+
+
+select *
+from calls;
