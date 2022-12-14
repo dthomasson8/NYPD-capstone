@@ -29,27 +29,15 @@ from arrests;
 
 
 /* CTEs for finding the arrests in common*/
-with squirrel_info as(
-    select age, primarycolor, activities, groundlocation, running, climbing, threatened, location
-    from squirrels
-    where threatened is true
-    group by 1,2,3,4,5,6,7,8
-    order by 1
-),
-    
-arrest_info as(
-    select arrestdate, offensedesc as crime, concat('POINT','(',latitude, ' ', longitude,')') as location,
-        case 
-            when arrestdate is notnull then 'arrest'
-            end as arrest
+with arrest_info as(
+    select arrestdate, offensedesc as crime, concat('POINT','(',latitude, ' ', longitude,')') as location, 'arrest' as arrest_v_call
     from arrests
     group by 1,2,3
     order by 1 desc
 ),
 
-
 call_info as(
-    select cast(incidentdate as date), typedesc as call_type, concat('POINT','(',latitude, ' ', longitude,')') as location
+    select cast(incidentdate as date), typedesc as call_type, concat('POINT','(',latitude, ' ', longitude,')') as location, 'call' as arrest_v_call
     from calls
     where incidentdate <= '09/30/2022'
     group by 1,2,3
@@ -58,6 +46,14 @@ call_info as(
 
 select *
 from arrest_info
-union 
-select *
+union
+select*
 from call_info;
+
+
+
+select age, primarycolor, activities, groundlocation, running, climbing, threatened, location
+    from squirrels
+    where threatened is true
+    group by 1,2,3,4,5,6,7,8
+    order by 1
