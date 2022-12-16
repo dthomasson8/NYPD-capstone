@@ -43,12 +43,15 @@ call_info as(
     group by 1,2,3
     order by 1 desc
 )
-
-select *
-from arrest_info
-union
-select*
-from call_info;
+    
+select crime,arrest_v_call, count(*)
+from (select *
+    from arrest_info
+    union
+    select *
+    from call_info) as sub
+group by 1,2
+order by 3 desc;
 
 
 
